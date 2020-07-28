@@ -46,7 +46,7 @@ languageRouter
 languageRouter
   .get('/head', async (req, res, next) => {
     try {
-      const word = LanguageService.getFirstWord(req.app.get('db'))
+      const word = await LanguageService.getFirstWord(req.app.get('db'))
       res.json({ word })
       next()
     } catch (error) {
