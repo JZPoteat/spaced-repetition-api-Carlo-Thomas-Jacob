@@ -1,3 +1,5 @@
+const Knex = require("knex")
+
 const LanguageService = {
   getUsersLanguage(db, user_id) {
     return db
@@ -27,6 +29,28 @@ const LanguageService = {
         'incorrect_count',
       )
       .where({ language_id })
+  },
+
+  getFirstWord(db) {
+    return db
+      .from('word')
+      .join('language', 'language.head', 'head')
+      .select(
+        'word.*'
+      )
+      .first()
+  },
+
+  setWord(db, id, newData) {
+    return db('word')
+      .where({ id })
+      .update(newData)
+  },
+
+  setHead(db, languageId, id) {
+    return db('language')
+      .where({ languageId })
+      .update({ head: id })
   },
 }
 
