@@ -45,14 +45,46 @@ languageRouter
 
 languageRouter
   .get('/head', async (req, res, next) => {
-    // implement me
-    res.send('implement me!')
+    try {
+      const word = LanguageService.getFirstWord(req.app.get('db'))
+      res.json({ word })
+      next()
+    } catch (error) {
+      next(error)
+    }
   })
 
 languageRouter
   .post('/guess', async (req, res, next) => {
-    // implement me
-    res.send('implement me!')
+    /*
+    wordcol = 'word col from database'
+
+    wordguess = 'inputted word'
+    if (word is correct)
+      number-correct + 1
+      mem-value * 2
+    else
+      mem-value = 1
+
+    while(loop)
+      let curWord = getWord(wordcol.next)
+      i++
+      if i = mem-value
+        nextWord = getWord(curWord.next)
+        curWord.next = wordCol.id
+        setWord(database, curWord)
+        setWordNext(database, curWord.id, curWord.next)
+        getWord.next = nextWord.id
+        setWord(database, wordCol)
+        loop = false
+      if curWord.next = null
+        curWord.next = wordCol.id
+        wordCol.next = null
+        loop = false
+
+    insert value (database, mem-value)      
+    }
+    */
   })
 
 module.exports = languageRouter
