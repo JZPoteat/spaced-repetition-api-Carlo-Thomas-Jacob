@@ -1,4 +1,5 @@
 const Knex = require("knex")
+const xss = require("xss");
 
 const LanguageService = {
   getUsersLanguage(db, user_id) {
@@ -41,6 +42,13 @@ const LanguageService = {
       .first()
   },
 
+  getWord(db, id) {
+    return db
+      .from('word')
+      .select('*')
+      .where({ id })
+  },
+
   setWord(db, id, newData) {
     return db('word')
       .where({ id })
@@ -49,9 +57,21 @@ const LanguageService = {
 
   setHead(db, languageId, id) {
     return db('language')
-      .where({ languageId })
+      .where({ id: languageId })
       .update({ head: id })
   },
+  serializeWord(word) {
+    return {
+      id: word.id,
+      original: xss(word.original),
+      translation: xss(word.translation),
+      memory_value: word.memory_value,
+      correct_count: word.correct_count,
+      incorrect_count: word.incorrect_count,
+      language_id: word.language_id,
+      next: word.next
+    }
+  }
 }
 
 module.exports = LanguageService
