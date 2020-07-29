@@ -1,4 +1,5 @@
 const Knex = require("knex")
+const xss = require('xss');
 
 const LanguageService = {
   getUsersLanguage(db, user_id) {

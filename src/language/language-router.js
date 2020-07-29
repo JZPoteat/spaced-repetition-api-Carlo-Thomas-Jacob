@@ -56,6 +56,7 @@ languageRouter
   .post('/guess', jsonParser, async (req, res, next) => {
     // implement me -- WE DID!
     let { guess } = req.body;
+    console.log(req.body);
     let head = await LanguageService.getFirstWord(req.app.get('db'), 1);
     let newHead = await LanguageService.getWord(req.app.get('db'), head.next);
     let isCorrectGuess = false;
