@@ -59,7 +59,7 @@ const LanguageService = {
 
   setHead(db, languageId, id) {
     return db('language')
-      .where({ languageId })
+      .where({ id: languageId })
       .update({ head: id })
   },
   serializeWord(word) {
@@ -73,7 +73,7 @@ const LanguageService = {
       language_id: word.language_id,
       next: word.next
     }
-  },
+  }
 
 }
 

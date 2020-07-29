@@ -55,7 +55,10 @@ languageRouter
     // implement me
     let { guess } = req.body;
     let head = await LanguageService.getFirstWord(req.app.get('db'));
+    let newHead = await LanguageService.getWord(req.app.get('db'), head.next);
+    console.log('here is the new head', newHead);
     console.log('head', head);
+    let isCorrectGuess = false;
     let correctCount = head.correct_count;
     let incorrectCount = head.incorrect_count;
     let currWord = head;
@@ -69,10 +72,12 @@ languageRouter
     }
     if(guess.toLowerCase() === head.translation.toLowerCase()) {
       M = head.memory_value * 2;
+      isCorrectGuess = true;
       correctCount++;
     } else {
-      incorrectCount;
+      incorrectCount++;
     }
+
     while (count < M ) {
       console.log('next word', nextWord);
       if (nextWord === null) {
@@ -97,9 +102,21 @@ languageRouter
         next: nextWord,
     };
     await LanguageService.setHead(req.app.get('db'), head.language_id, head.next)
+
     await LanguageService.setWord(req.app.get('db'), currWord.id, updateCurrWord);
     await LanguageService.setWord(req.app.get('db'), head.id, updateGuessWord);
-    
+
+    let language = await LanguageService.getUsersLanguage(req.app.get('db'), req.user.id)
+    console.log('here is the language', language)
+    let summary = {
+      nextWord: newHead.original,
+      totalScore: language.total_score,
+      wordCorrectCount: correctCount,
+      wordIncorrectCount: incorrectCount,
+      answer: head.translation,
+      isCorrect: isCorrectGuess
+    }
+    res.json(summary)
   })
 
 module.exports = languageRouter
