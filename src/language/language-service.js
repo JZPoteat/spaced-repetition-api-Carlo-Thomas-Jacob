@@ -62,6 +62,15 @@ const LanguageService = {
       .where({ id: languageId })
       .update({ head: id })
   },
+
+  getHead(db, id) {
+    return db('language')
+      .select('head')
+      .where({ head: id })
+      .then(rows => {
+        return rows[0]
+      })
+  },
   serializeWord(word) {
     return {
       id: word.id,
