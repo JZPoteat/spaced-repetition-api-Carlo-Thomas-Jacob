@@ -49,7 +49,11 @@ languageRouter
     // implement me -- We haven't :(((((
     const head = await LanguageService.getFirstWord(req.app.get('db'), 1);
 
-    res.status(200).json(LanguageService.serializeWord(head));
+    req.language.total_score
+    res.status(200).json({
+      ...LanguageService.serializeWord(head),
+      totalScore: req.language.total_score
+    });
   })
 
 languageRouter
