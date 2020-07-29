@@ -1,6 +1,7 @@
 const express = require('express')
 const LanguageService = require('./language-service')
 const { requireAuth } = require('../middleware/jwt-auth')
+const jsonParser = express.json();
 
 const languageRouter = express.Router()
 
@@ -45,46 +46,79 @@ languageRouter
 
 languageRouter
   .get('/head', async (req, res, next) => {
-    try {
-      const word = await LanguageService.getFirstWord(req.app.get('db'))
-      res.json({ word })
-      next()
-    } catch (error) {
-      next(error)
-    }
+    // implement me -- We haven't :(((((
+    const head = await LanguageService.getFirstWord(req.app.get('db'), 1);
+
+    res.status(200).json(LanguageService.serializeWord(head));
   })
 
 languageRouter
-  .post('/guess', async (req, res, next) => {
-    /*
-    wordcol = 'word col from database'
+  .post('/guess', jsonParser, async (req, res, next) => {
+    // implement me -- WE DID!
+    let { guess } = req.body;
+    let head = await LanguageService.getFirstWord(req.app.get('db'), 1);
+    let newHead = await LanguageService.getWord(req.app.get('db'), head.next);
+    let isCorrectGuess = false;
+    let correctCount = head.correct_count;
+    let incorrectCount = head.incorrect_count;
+    let currWord = head;
+    let nextWord = currWord.next;
+    let M = 1;
+    let count = 0;
 
-    wordguess = 'inputted word'
-    if (word is correct)
-      number-correct + 1
-      mem-value * 2
-    else
-      mem-value = 1
-
-    while(loop)
-      let curWord = getWord(wordcol.next)
-      i++
-      if i = mem-value
-        nextWord = getWord(curWord.next)
-        curWord.next = wordCol.id
-        setWord(database, curWord)
-        setWordNext(database, curWord.id, curWord.next)
-        getWord.next = nextWord.id
-        setWord(database, wordCol)
-        loop = false
-      if curWord.next = null
-        curWord.next = wordCol.id
-        wordCol.next = null
-        loop = false
-
-    insert value (database, mem-value)      
+    if(!guess) {
+      return res.status(400).json({
+        error: "Missing 'guess' in request body"
+      })
     }
-    */
+
+    if(guess.toLowerCase() === head.translation.toLowerCase()) {
+      M = head.memory_value * 2;
+      isCorrectGuess = true;
+      correctCount++;
+    } else {
+
+      incorrectCount++;
+    }
+
+    while (count < M ) {
+      if (nextWord === null) {
+        count++;
+      } else {
+        currWord = await LanguageService.getWord(req.app.get('db'), currWord.next);
+        nextWord = currWord.next;
+        
+
+        count++;
+      }
+    }
+    
+    let updateCurrWord = {
+      next: head.id,
+    }
+    let updateGuessWord = {
+        correct_count: correctCount,
+        incorrect_count: incorrectCount,
+        memory_value: M,
+        next: nextWord,
+    };
+
+    await LanguageService.setHead(req.app.get('db'), head.language_id, head.next)
+
+    await LanguageService.setWord(req.app.get('db'), currWord.id, updateCurrWord);
+    await LanguageService.setWord(req.app.get('db'), head.id, updateGuessWord);
+
+    let language = await LanguageService.getUsersLanguage(req.app.get('db'), req.user.id)
+
+    let summary = {
+      nextWord: newHead.original,
+      totalScore: language.total_score,
+      wordCorrectCount: newHead.correct_count,
+      wordIncorrectCount: newHead.incorrect_count,
+      answer: head.translation,
+      isCorrect: isCorrectGuess
+    }
+    res.json(summary)
   })
 
 module.exports = languageRouter
