@@ -1,4 +1,5 @@
 const Knex = require("knex")
+const xss = require('xss')
 
 const LanguageService = {
   getUsersLanguage(db, user_id) {
@@ -64,6 +65,11 @@ const LanguageService = {
       .update({ head: id })
   },
 
+  setTotalScore(db, languageId, totalScore) {
+    return db('language')
+      .where({ id: languageId })
+      .update({ total_score: totalScore })
+  },
   // getHead(db, id) {
   //   return db('language')
   //     .select('head')

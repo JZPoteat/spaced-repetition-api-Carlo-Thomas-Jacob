@@ -56,6 +56,7 @@ languageRouter
   .post('/guess', jsonParser, async (req, res, next) => {
     // implement me -- WE DID!
     let { guess } = req.body;
+    let tempTotalScore = req.language.total_score;
     let head = await LanguageService.getFirstWord(req.app.get('db'), 1);
     let newHead = await LanguageService.getWord(req.app.get('db'), head.next);
     let isCorrectGuess = false;
@@ -76,6 +77,7 @@ languageRouter
       M = head.memory_value * 2;
       isCorrectGuess = true;
       correctCount++;
+      tempTotalScore++;
     } else {
 
       incorrectCount++;
@@ -108,11 +110,12 @@ languageRouter
     await LanguageService.setWord(req.app.get('db'), currWord.id, updateCurrWord);
     await LanguageService.setWord(req.app.get('db'), head.id, updateGuessWord);
 
-    let language = await LanguageService.getUsersLanguage(req.app.get('db'), req.user.id)
+    await LanguageService.setTotalScore(req.app.get('db'), head.language_id, tempTotalScore);
+    //let language = await LanguageService.getUsersLanguage(req.app.get('db'), req.user.id)
 
     let summary = {
       nextWord: newHead.original,
-      totalScore: language.total_score,
+      totalScore: tempTotalScore,
       wordCorrectCount: newHead.correct_count,
       wordIncorrectCount: newHead.incorrect_count,
       answer: head.translation,
