@@ -31,10 +31,11 @@ const LanguageService = {
       .where({ language_id })
   },
 
-  getFirstWord(db) {
+  getFirstWord(db, languageId) {
     return db
       .from('word')
-      .join('language', 'language.head', 'head')
+      .join('language', 'language.head', 'word.id')
+      .where({ 'language.id': languageId })
       .select(
         'word.*'
       )
@@ -63,14 +64,14 @@ const LanguageService = {
       .update({ head: id })
   },
 
-  getHead(db, id) {
-    return db('language')
-      .select('head')
-      .where({ head: id })
-      .then(rows => {
-        return rows[0]
-      })
-  },
+  // getHead(db, id) {
+  //   return db('language')
+  //     .select('head')
+  //     .where({ head: id })
+  //     .then(rows => {
+  //       return rows[0]
+  //     })
+  // },
   serializeWord(word) {
     return {
       id: word.id,

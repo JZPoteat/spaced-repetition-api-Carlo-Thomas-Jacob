@@ -46,20 +46,18 @@ languageRouter
 
 languageRouter
   .get('/head', async (req, res, next) => {
-    // implement me
-    res.send('implement me!')
+    // implement me -- We haven't :(((((
+    const head = await LanguageService.getFirstWord(req.app.get('db'), 1);
+
+    res.status(200).json(LanguageService.serializeWord(head));
   })
 
 languageRouter
   .post('/guess', jsonParser, async (req, res, next) => {
-    // implement me
+    // implement me -- WE DID!
     let { guess } = req.body;
-    let head = await LanguageService.getFirstWord(req.app.get('db'));
+    let head = await LanguageService.getFirstWord(req.app.get('db'), 1);
     let newHead = await LanguageService.getWord(req.app.get('db'), head.next);
-    
-    console.log('current head', head);
-    console.log('next head', newHead);
-
     let isCorrectGuess = false;
     let correctCount = head.correct_count;
     let incorrectCount = head.incorrect_count;
@@ -67,6 +65,7 @@ languageRouter
     let nextWord = currWord.next;
     let M = 1;
     let count = 0;
+
     if(!guess) {
       return res.status(400).json({
         error: "Missing 'guess' in request body"
@@ -93,11 +92,6 @@ languageRouter
         count++;
       }
     }
-
-
-    console.log('currWord', currWord);
-    console.log('nextWord', nextWord);
-    
     
     let updateCurrWord = {
       next: head.id,
@@ -109,16 +103,11 @@ languageRouter
         next: nextWord,
     };
 
-    console.log('next head before set head', head.next);
     await LanguageService.setHead(req.app.get('db'), head.language_id, head.next)
-
-    const lang = LanguageService.getHead(req.app.get('db'), head.next)
-    console.log(lang);
 
     await LanguageService.setWord(req.app.get('db'), currWord.id, updateCurrWord);
     await LanguageService.setWord(req.app.get('db'), head.id, updateGuessWord);
 
-    console.log('------------------------')
     let language = await LanguageService.getUsersLanguage(req.app.get('db'), req.user.id)
 
     let summary = {
