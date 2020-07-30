@@ -51,8 +51,10 @@ languageRouter
 
     req.language.total_score
     res.status(200).json({
-      ...LanguageService.serializeWord(head),
-      totalScore: req.language.total_score
+      nextWord: head.original,
+      totalScore: req.language.total_score,
+      wordCorrectCount: head.correct_count,
+      wordIncorrectCount: head.incorrect_count
     });
   })
 
