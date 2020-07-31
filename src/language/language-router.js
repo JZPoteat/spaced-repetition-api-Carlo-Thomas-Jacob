@@ -48,6 +48,7 @@ languageRouter
   .get('/head', async (req, res, next) => {
     // implement me -- We haven't :(((((
     const language = await LanguageService.getUsersLanguage(req.app.get('db'), req.user.id);
+    console.log('here is the language', language);
     const head = await LanguageService.getFirstWord(req.app.get('db'), language.id);
     req.language.total_score
     res.status(200).json({
@@ -63,7 +64,8 @@ languageRouter
     // implement me -- WE DID!
     let { guess } = req.body;
     let tempTotalScore = req.language.total_score;
-    let head = await LanguageService.getFirstWord(req.app.get('db'), 1);
+    const language = await LanguageService.getUsersLanguage(req.app.get('db'), req.user.id);
+    let head = await LanguageService.getFirstWord(req.app.get('db'), language.id);
     let newHead = await LanguageService.getWord(req.app.get('db'), head.next);
     let isCorrectGuess = false;
     let correctCount = head.correct_count;

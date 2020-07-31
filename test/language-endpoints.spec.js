@@ -22,7 +22,7 @@ describe('Language Endpoints', function () {
   /**
    * @description Endpoints for a language owned by a user
    **/
-  describe(`Endpoints protected by user`, () => {
+  describe.only(`Endpoints protected by user`, () => {
     const languageSpecificEndpoint = [
       {
         title: `GET /api/language/head`,

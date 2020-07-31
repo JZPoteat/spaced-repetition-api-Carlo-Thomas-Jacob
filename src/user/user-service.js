@@ -60,8 +60,8 @@ const UserService = {
         .first()
       
       console.log('languageId', languageId);
-      const listOfWords = await LanguageService.getWordsByLanguage(db, languageId.id);
-      console.log('here is the list of words', listOfWords);  
+      // const listOfWords = await LanguageService.getWordsByLanguage(db, languageId.id);
+      // console.log('here is the list of words', listOfWords);  
       const languageWords = [
         ['entraine toi', 'practice', 2],
         ['bonjour', 'hello', 3],
