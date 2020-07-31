@@ -118,12 +118,13 @@ describe('User Endpoints', function () {
         .expect(400, { error: `Username already taken` })
     })
 
-    describe(`Given a valid user`, () => {
+    describe.only(`Given a valid user`, () => {
       it(`responds 201, serialized user with no password`, () => {
         const newUser = {
           username: 'test username',
           password: '11AAaa!!',
           name: 'test name',
+          language: 'French'
         }
         return supertest(app)
           .post('/api/user')
@@ -143,6 +144,7 @@ describe('User Endpoints', function () {
           username: 'test username',
           password: '11AAaa!!',
           name: 'test name',
+          language: 'French'
         }
         return supertest(app)
           .post('/api/user')
@@ -170,6 +172,7 @@ describe('User Endpoints', function () {
           username: 'test username',
           password: '11AAaa!!',
           name: 'test name',
+          language: 'French'
         }
         const expectedList = {
           name: 'French',
