@@ -16,6 +16,12 @@ const LanguageService = {
       .first()
   },
 
+  getLanguages(db) {
+    return db
+      .from('language')
+      .select('name')
+  },
+
   getLanguageWords(db, language_id) {
     return db
       .from('word')
