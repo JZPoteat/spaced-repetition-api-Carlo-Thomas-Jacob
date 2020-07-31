@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs')
+const LanguageService = require('../language/language-service')
 
 const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&])[\S]+/
 
@@ -41,7 +42,8 @@ const UserService = {
       username: user.username,
     }
   },
-  populateUserWords(db, user_id) {
+  populateUserWords(db, user_id ) {
+
     return db.transaction(async trx => {
       const [languageId] = await trx
         .into('language')
@@ -56,7 +58,10 @@ const UserService = {
         .from('word_id_seq')
         .select('last_value')
         .first()
-
+      
+      console.log('languageId', languageId);
+      const listOfWords = await LanguageService.getWordsByLanguage(db, languageId.id);
+      console.log('here is the list of words', listOfWords);  
       const languageWords = [
         ['entraine toi', 'practice', 2],
         ['bonjour', 'hello', 3],

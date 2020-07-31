@@ -1,7 +1,7 @@
 const app = require('../src/app')
 const helpers = require('./test-helpers')
 
-describe.only('Language Endpoints', function () {
+describe('Language Endpoints', function () {
   let db
 
   const testUsers = helpers.makeUsersArray()
@@ -123,7 +123,7 @@ describe.only('Language Endpoints', function () {
       )
     })
 
-    it.only(`responds with 200 and user's languages`, () => {
+    it(`responds with 200 and user's languages`, () => {
       return supertest(app)
         .get(`/api/language/head`)
         .set('Authorization', helpers.makeAuthHeader(testUser))

@@ -48,6 +48,13 @@ const LanguageService = {
       )
       .first()
   },
+  // getWordsByLanguage(db, languageId) {
+  //   return db
+  //     .from('word')
+  //     .select('*'
+  //     )
+  //     .where('word.language_id', 1)
+  // },
 
   setWord(db, id, newData) {
     return db('word')
