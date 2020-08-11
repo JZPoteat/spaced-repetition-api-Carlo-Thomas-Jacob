@@ -1,5 +1,25 @@
 # Spaced repetition API!
 
+Speak-Easy is a language learning application that assists users in learning how to speak multiple foreign languages by using spaced repetition.  The app encourages the user to use their microphone to answer the questions while learning, but also gives the option to type or click on an option.  
+
+
+As you practice within the app, Speak-Easy keeps track of your current score for each word, and provides feedback after each answer.  To accelerate the learning process, Speak-Easy uses the spaced repetition algorithm, ensuring that you see the more challenging questions more often.  
+
+The spaced repetition algorithm is achieved by structuring the database using a linked list.  
+
+### Tech Stack
+
+React, Node, Express, PostgreSQL, HTML, CSS, JavaScript
+
+### Server
+
+The app is designed to be used with this server: [https://github.com/thinkful-ei-orka/spaced-repetition-api-Carlo-Thomas-Jacob]
+
+### To Use With Server
+
+Please update the API_ENDPOINT in the config.js to point to where your server is running.
+
+
 ## Local dev setup
 
 If using user `dunder-mifflin`:
