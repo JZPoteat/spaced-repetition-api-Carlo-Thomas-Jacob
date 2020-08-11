@@ -12,7 +12,7 @@ userRouter.get("/listlanguages", async (req, res, next) => {
 });
 
 userRouter.post("/", jsonBodyParser, async (req, res, next) => {
-  const { password, username, name, } = req.body;
+  const { password, username, name, language } = req.body;
   
   for (const field of ["name", "username", "password"])
     if (!req.body[field])
@@ -43,7 +43,7 @@ userRouter.post("/", jsonBodyParser, async (req, res, next) => {
 
     const user = await UserService.insertUser(req.app.get("db"), newUser);
 
-    await UserService.populateUserWords(req.app.get("db"), user.id);
+    await UserService.populateUserWords(req.app.get("db"), user.id, language);
 
     res
       .status(201)

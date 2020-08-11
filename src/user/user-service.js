@@ -42,13 +42,13 @@ const UserService = {
       username: user.username,
     }
   },
-  populateUserWords(db, user_id ) {
+  populateUserWords(db, user_id, language ) {
 
     return db.transaction(async trx => {
       const [languageId] = await trx
         .into('language')
         .insert([
-          { name: 'French', user_id },
+          { name: language, user_id },
         ], ['id'])
 
       // when inserting words,
@@ -62,16 +62,7 @@ const UserService = {
       console.log('languageId', languageId);
       // const listOfWords = await LanguageService.getWordsByLanguage(db, languageId.id);
       // console.log('here is the list of words', listOfWords);  
-      const languageWords = [
-        ['entraine toi', 'practice', 2],
-        ['bonjour', 'hello', 3],
-        ['maison', 'house', 4],
-        ['développeur', 'developer', 5],
-        ['traduire', 'translate', 6],
-        ['incroyable', 'amazing', 7],
-        ['chien', 'dog', 8],
-        ['chat', 'cat', null],
-      ]
+      const languageWords = LanguageService.startingWords(language);
 
       const [languageHeadId] = await trx
         .into('word')

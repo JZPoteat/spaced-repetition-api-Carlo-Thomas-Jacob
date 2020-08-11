@@ -19,7 +19,7 @@ const LanguageService = {
   getLanguages(db) {
     return db
       .from('language')
-      .select('name')
+      .distinct('name')
   },
 
   getLanguageWords(db, language_id) {
@@ -48,13 +48,6 @@ const LanguageService = {
       )
       .first()
   },
-  // getWordsByLanguage(db, languageId) {
-  //   return db
-  //     .from('word')
-  //     .select('*'
-  //     )
-  //     .where('word.language_id', 1)
-  // },
 
   setWord(db, id, newData) {
     return db('word')
@@ -83,14 +76,7 @@ const LanguageService = {
       .where({ id: languageId })
       .update({ total_score: totalScore })
   },
-  // getHead(db, id) {
-  //   return db('language')
-  //     .select('head')
-  //     .where({ head: id })
-  //     .then(rows => {
-  //       return rows[0]
-  //     })
-  // },
+
   serializeWord(word) {
     return {
       id: word.id,
@@ -101,6 +87,33 @@ const LanguageService = {
       incorrect_count: word.incorrect_count,
       language_id: word.language_id,
       next: word.next
+    }
+  }, 
+  startingWords(language) {
+    if(language === 'French') {
+      return [
+        ['entraine toi', 'practice', 2],
+        ['bonjour', 'hello', 3],
+        ['maison', 'house', 4],
+        ['développeur', 'developer', 5],
+        ['traduire', 'translate', 6],
+        ['incroyable', 'amazing', 7],
+        ['chien', 'dog', 8],
+        ['chat', 'cat', null],
+      ]
+    } else if(language === 'Spanish') {
+      return [
+        ['mujer', 'woman', 2],
+        ['arbol', 'tree', 3],
+        ['amor', 'love', 4],
+        ['castor', 'beaver', 5],
+        ['maiz', 'corn', 6],
+        ['espada', 'sword', 7],
+        ['fuego', 'fire', 8],
+        ['tortuga', 'turtle', 9],
+        ['biblioteca', 'library', 10],
+        ['comestibles', 'groceries', null]
+      ]
     }
   }
 
