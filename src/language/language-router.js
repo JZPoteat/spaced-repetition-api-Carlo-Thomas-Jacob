@@ -97,8 +97,6 @@ languageRouter
       } else {
         currWord = await LanguageService.getWord(req.app.get('db'), currWord.next);
         nextWord = currWord.next;
-        
-
         count++;
       }
     }
