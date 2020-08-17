@@ -1,3 +1,5 @@
+-- psql -d spaced_repetition -f ./seeds/seed.tables.sql
+
 BEGIN;
 
 TRUNCATE
